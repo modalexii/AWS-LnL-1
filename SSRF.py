@@ -21,8 +21,7 @@ def research_url(url):
         
     if not "error" in research_results:
     
-        title_regex = '<title>(.*)</title>'
-            title_search = re.search('<title>(.*)</title>', research_results["html"], re.IGNORECASE)
+        title_search = re.search('<title>(.*)</title>', research_results["html"], re.IGNORECASE)
         if title_search:
             research_results["title"] = title_search.group(1)
         else:

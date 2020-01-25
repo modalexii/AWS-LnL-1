@@ -22,8 +22,9 @@ def research_url(url):
     if not "error" in research_results:
     
         title_regex = '<title>(.*)</title>'
-        if match := re.search(title_regex, research_results["html"], re.IGNORECASE):
-            research_results["title"] = match.group(1)
+            title_search = re.search('<title>(.*)</title>', research_results["html"], re.IGNORECASE)
+        if title_search:
+            research_results["title"] = title_search.group(1)
         else:
             research_results["title"] = '(none)'
             

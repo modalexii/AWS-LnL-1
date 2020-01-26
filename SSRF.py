@@ -1,7 +1,9 @@
+import sys, re, base64, socket, json
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from io import BytesIO
+import urllib.request
 from urllib.parse import urlparse, unquote_plus
-import re, urllib.request, base64, socket, json
+from io import BytesIO
+
 
 def scope_strings():
 
@@ -226,6 +228,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 def run_app():
     httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
     httpd.serve_forever()
+
+
+if sys.version_info[0] != 3 or sys.version_info[1] < 7:
+    print("This script requires Python version 3.7 or higher")
+    sys.exit(1)
     
 if __name__ == "__main__":
     strings = scope_strings()

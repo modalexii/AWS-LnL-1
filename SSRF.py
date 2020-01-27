@@ -20,6 +20,11 @@ def scope_strings():
                 background:#222; 
                 color:#fff;
             }
+            a.title {
+                text-decoration:none; 
+                color: inherit; 
+                cursor:pointer;
+            }
             input.url {
                 width: 500px;
                 background: #333;
@@ -58,7 +63,7 @@ def scope_strings():
         </style>
 	</head>
 	<body>
-		<h2>Stealth Site Research Function</h2>
+		<h2><a href="/" class="title">Stealth Site Research Function</a></h2>
 		<p>Enter a URL to investigate. Web requests are routed from our server through a Tor gateway, so your opsec is preserved.</p>
 		<pre>
 Stealth Site Research Function Architecture:

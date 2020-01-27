@@ -198,8 +198,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             
             # write out the research results
             try:
-                self.wfile.write(b'<div id="results"> ')
-                self.wfile.write(b'<h3 class="results">Results</h3>')
                 if not "error" in research_results:
                     formatted_research = str.encode(strings["html_result_table"].format(
                         url = research_results["url"],
@@ -211,10 +209,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         screenshot_b64 = research_results["screenshot_b64"].decode(),
                         html = research_results["html"]
                     ))
+                    self.wfile.write(b'<div id="results"> ')
+                    self.wfile.write(b'<h3 class="results">Results</h3>')
                     self.wfile.write(formatted_research)
+                    self.wfile.write(b'</div>') # close div id="results"
                 else:  
                     self.wfile.write(strings["html_url_error"])
-                self.wfile.write(b'</div>') # close div id="results"
             except UnboundLocalError:
                 # this means there were no research results, hopefully becuase the request was for the web root
                 pass

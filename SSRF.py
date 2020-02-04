@@ -13,8 +13,21 @@ def scope_strings():
     
     strings["html_head_body"] = b'''
 <html>
-	<head>
-		<title>Stealth Site Research Function</title>
+    <head>
+        <title>Stealth Site Research Function</title>
+        <script>
+        function checkURLProtocolExists(inputField) {
+            var isValid = /^https?:\/\//.test(inputField.value);
+            if (isValid) {
+                document.getElementsByClassName("validate_fail")[0].style.display = "none"
+                document.getElementById("url_submit").disabled = false;
+            } else {
+                document.getElementsByClassName("validate_fail")[0].style.display = "inherit"
+                document.getElementById("url_submit").disabled = true;
+            }
+            return isValid;
+        }
+        </script>
         <style>
             body {
                 background:#222; 
@@ -60,33 +73,38 @@ def scope_strings():
             td.results:first-child {
                 text-align: right;
             }
+            .validate_fail {
+                color: red;
+                display: none;
+            }
         </style>
-	</head>
-	<body>
-		<h2><a href="/" class="title">Stealth Site Research Function</a></h2>
-		<p>Enter a URL to investigate. Web requests are routed from our server through a Tor gateway, so your opsec is preserved.</p>
-		<pre>
+    </head>
+    <body>
+        <h2><a href="/" class="title">Stealth Site Research Function</a></h2>
+        <p>Enter a URL to investigate. Web requests are routed from our server through a Tor gateway, so your opsec is preserved.</p>
+        <pre>
 Stealth Site Research Function Architecture:
-		
+        
                   +--------------AWS-------------+
                   |                              |
 +-----+             +----------+     +---------+             +---------------+
 | You |-----------> |   Our    +---> | Our Tor |-----------> |  Site you're  |
 |     |             |  Server  |     | Gateway |             | investigating |
 +-----+             +----------+     +---------+             +---------------+
-		</pre>
+        </pre>
         <p>Try it out!</p>
         <form action="/research" method="get">
-            <input type="text" class="url" name="url" placeholder="http://..."></input>
-            <input type="submit" class="submit" value="Research"></input>
+            <input type="text" class="url" name="url" id="url_input" placeholder="http://..." onblur="checkURLProtocolExists(this)"></input>
+            <input type="submit" class="submit" id="url_submit" value="Research"></input>
         </form>
+        <span class="validate_fail">URL must have protocol like http:// or https://</span>
         '''
         
     strings["html_footer"] = b'''
         <p class="warning">&#9888; This application is minimally-functional, trivially exploitable, and does not actually use Tor. You MUST decomission this server after the lab!</p>
-	</body>
-</html>			
-		'''
+    </body>
+</html>            
+        '''
         
     strings["html_result_table"] = '''
             <table class="results">
@@ -228,14 +246,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
             self.wfile.write(strings["html_404"])
-		
+        
 
 def run_app():
     httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
 
-if sys.version_info[0] != 3 or sys.version_info[1] < 7:
+if sys.version_info[0] != 3 :
     print("This script requires Python version 3.7 or higher")
     sys.exit(1)
     
